@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import Book from '../common/Book'
-//import serializeForm from 'form-serialize'
+import BookShelf from '../common/BookShelf';
 
 class HomeScreen extends Component {
 
+  booksByShelf = (shelf) => {
+    return this.props.books.filter((book) => book.shelf === shelf);
+  }
+
   render() {
-    const { books } = this.props
-    //"wantToRead", "currentlyReading", "read"
+    const { onBookUpdate } = this.props
+    
     return (
         <div className="list-books">
         <div className="list-books-title">
@@ -15,42 +18,18 @@ class HomeScreen extends Component {
         </div>
         <div className="list-books-content">
           <div>
-            <div className="bookshelf">
-              <h2 className="bookshelf-title">Currently Reading</h2>
-              <div className="bookshelf-books">
-                <ol className="books-grid">
-                  {
-                    books.filter((book) => book.shelf === 'currentlyReading').map((book) => (
-                      <Book key={book.id} book={book}/>
-                    ))
-                  }
-                </ol>
-              </div>
-            </div>
-            <div className="bookshelf">
-              <h2 className="bookshelf-title">Want to Read</h2>
-              <div className="bookshelf-books">
-                <ol className="books-grid">
-                  {
-                    books.filter((book) => book.shelf === 'wantToRead').map((book) => (
-                      <Book key={book.id} book={book}/>
-                    ))
-                  }
-                </ol>
-              </div>
-            </div>
-            <div className="bookshelf">
-              <h2 className="bookshelf-title">Read</h2>
-              <div className="bookshelf-books">
-                <ol className="books-grid">
-                  {
-                    books.filter((book) => book.shelf === 'read').map((book) => (
-                      <Book key={book.id} book={book}/>
-                    ))
-                  }    
-                </ol>
-              </div>
-            </div>
+            <BookShelf 
+              title="Currently Reading" 
+              books={this.booksByShelf('currentlyReading')}
+              onBookUpdate={onBookUpdate}/>
+            <BookShelf 
+              title="Want to Read" 
+              books={this.booksByShelf('wantToRead')}
+              onBookUpdate={onBookUpdate}/>
+            <BookShelf 
+              title="Read" 
+              books={this.booksByShelf('read')}
+              onBookUpdate={onBookUpdate}/>
           </div>
         </div>
         <div className="open-search">
