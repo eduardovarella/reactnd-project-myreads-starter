@@ -1,8 +1,28 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-//import serializeForm from 'form-serialize'
+import * as BooksAPI from '../../BooksAPI'
+import Book from '../common/Book';
 
 class SearchScreen extends Component {
+
+    state = {
+        books: []
+    }
+
+    handleSearch = (e) => {
+        var searchKey = e.target.value;
+        if(searchKey === "")
+        {
+            this.setState({searchResult: []})
+        }
+        else
+        {
+            BooksAPI.search(searchKey).then((books) => {
+                this.setState({ books });
+            });
+        }
+    }
+
   render() {
     return (
         <div className="search-books">
@@ -17,12 +37,19 @@ class SearchScreen extends Component {
                 However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                 you don't find a specific author or title. Every search is limited by search terms.
                 */}
-                <input type="text" placeholder="Search by title or author"/>
+                <input type="text" placeholder="Search by title or author" onChange={this.handleSearch}/>
 
             </div>
             </div>
             <div className="search-books-results">
-            <ol className="books-grid"></ol>
+            <ol className="books-grid">
+                {
+                    this.state.books.map((book) => (
+                        <Book key={book.id} book={book}/>
+                    ))
+                }
+            </ol>
+                
             </div>
         </div>
     )
