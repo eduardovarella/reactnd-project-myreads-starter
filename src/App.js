@@ -8,13 +8,14 @@ import { Route } from 'react-router-dom';
 
 class BooksApp extends React.Component {
   state = {
+    loading: true,
     books: []
   }
 
   loadBooks() {
+    this.setState({ loading: true });
     BooksAPI.getAll().then((books) => {
-      console.log(books);
-      this.setState({ books });
+      this.setState({ loading: false, books });
     });
   }
 
@@ -23,6 +24,7 @@ class BooksApp extends React.Component {
   }
 
   updateBook = (book, shelf) => {
+    this.setState({ loading: true });
     BooksAPI.update(book, shelf).then((book) => {
       this.loadBooks();
     });
@@ -32,10 +34,10 @@ class BooksApp extends React.Component {
     return (
       <div className="app">
         <Route exact path="/" render={() => (
-          <HomeScreen books={ this.state.books } onBookUpdate={this.updateBook} />
+          <HomeScreen books={ this.state.books } onBookUpdate={this.updateBook} loading={this.state.loading} />
         )}/>
         <Route path="/search" render={() => (
-          <SearchScreen />
+          <SearchScreen booksOnShelfs={ this.state.books } onBookUpdate={this.updateBook}/>
         )}/>
       </div>
     )

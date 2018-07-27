@@ -9,7 +9,7 @@ class HomeScreen extends Component {
   }
 
   render() {
-    const { onBookUpdate } = this.props
+    const { loading, onBookUpdate } = this.props
     
     return (
         <div className="list-books">
@@ -21,15 +21,18 @@ class HomeScreen extends Component {
             <BookShelf 
               title="Currently Reading" 
               books={this.booksByShelf('currentlyReading')}
-              onBookUpdate={onBookUpdate}/>
+              onBookUpdate={onBookUpdate}
+              loading={loading}/>
             <BookShelf 
               title="Want to Read" 
               books={this.booksByShelf('wantToRead')}
-              onBookUpdate={onBookUpdate}/>
+              onBookUpdate={onBookUpdate}
+              loading={loading}/>
             <BookShelf 
               title="Read" 
               books={this.booksByShelf('read')}
-              onBookUpdate={onBookUpdate}/>
+              onBookUpdate={onBookUpdate}
+              loading={loading}/>
           </div>
         </div>
         <div className="open-search">
